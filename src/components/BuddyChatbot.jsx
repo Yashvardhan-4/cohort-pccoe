@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, Bot, Sparkles, Compass, Users, MapPin, Gamepad2, Calendar } from 'lucide-react';
-import { dataStore } from '../lib/supabase';
+import { askBuddyAI } from '../lib/gemini';
 
 export const BuddyChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,7 @@ export const BuddyChatbot = () => {
     {
       id: 1,
       sender: 'bot',
-      text: "Hey! I'm Buddy, your Cohort campus assistant. Ask me about clubs, finding peers, campus directions, or platform features!",
+      text: "Hey! I'm Buddy, your Cohort campus assistant powered by Google Gemini. Ask me about clubs, exams, campus directions, or platform features!",
       time: 'Just now',
     },
   ]);
@@ -27,9 +27,9 @@ export const BuddyChatbot = () => {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSend = (textToSend) => {
+  const handleSend = async (textToSend) => {
     const query = (textToSend || input).trim();
-    if (!query) return;
+    if (!query || isTyping) return;
 
     const userMsg = {
       id: Date.now(),
@@ -42,35 +42,19 @@ export const BuddyChatbot = () => {
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const lower = query.toLowerCase();
-      let replyText = '';
+    try {
+      const response = await askBuddyAI(query, messages.map((m) => ({ isUser: m.sender === 'user', text: m.text })));
+      
       let routeAction = null;
-
-      const clubs = dataStore.getClubs();
-      const users = dataStore.getUsers();
-
-      if (lower.includes('community') || lower.includes('club') || lower.includes('gdgc') || lower.includes('owasp')) {
-        replyText = `We have 30+ active student clubs! Major ones include OWASP (Cybersecurity), GDGC (Google Developer Groups), ACM, GFG, and Art Circle. Would you like to explore the Communities directory?`;
+      const lower = query.toLowerCase();
+      if (lower.includes('club') || lower.includes('community')) {
         routeAction = { label: 'Explore Communities', path: '/dashboard/communities' };
-      } else if (lower.includes('map') || lower.includes('location') || lower.includes('canteen') || lower.includes('mech') || lower.includes('lab')) {
-        replyText = `PCCOE Campus Navigation: Computer & IT building is at B-Block, Mechanical is at A-Block, and the Canteen is near the central courtyard. Open the 3D Campus Map to see interactive floor layouts!`;
+      } else if (lower.includes('map') || lower.includes('block') || lower.includes('lab')) {
         routeAction = { label: 'Open Campus Map', path: '/dashboard/map' };
-      } else if (lower.includes('chirag') || lower.includes('yashvardhan') || lower.includes('friend') || lower.includes('peer') || lower.includes('user')) {
-        replyText = `You can search students and alumni in the Friends / Network directory. Found profiles for Chirag Ferwani (@chirag), Yashvardhan Borude (@yashvardhan), and Pooja Iyer (@pooja_iyer).`;
-        routeAction = { label: 'View Network', path: '/dashboard/network' };
-      } else if (lower.includes('game') || lower.includes('chess') || lower.includes('arcade') || lower.includes('sudoku')) {
-        replyText = `Feeling like a brain break? You can challenge me to a game of Chess, solve a Sudoku puzzle, or play Tic-Tac-Toe in the Arcade!`;
+      } else if (lower.includes('arcade') || lower.includes('game') || lower.includes('chess')) {
         routeAction = { label: 'Launch Arcade', path: '/dashboard/arcade' };
-      } else if (lower.includes('calendar') || lower.includes('exam') || lower.includes('insem') || lower.includes('holiday')) {
-        replyText = `The next In-Sem examinations begin on 25th August, followed by OWASP CyberSprint on 28th August. Check the full schedule in the Academic Calendar.`;
+      } else if (lower.includes('exam') || lower.includes('calendar')) {
         routeAction = { label: 'View Academic Calendar', path: '/dashboard/calendar' };
-      } else if (lower.includes('xd') || lower.includes('confession') || lower.includes('secret') || lower.includes('tip')) {
-        replyText = `XD is the anonymous campus board where students share candid tips, placement advice, and cafeteria reviews.`;
-        routeAction = { label: 'Open XD Exchange', path: '/dashboard/xd' };
-      } else {
-        replyText = `I can help you navigate anything on Cohort! Try checking out the Communities directory, 3D Campus Map, Realtime Connect messaging, or the Arcade.`;
-        routeAction = { label: 'Go to Feed', path: '/dashboard' };
       }
 
       setMessages((prev) => [
@@ -78,13 +62,24 @@ export const BuddyChatbot = () => {
         {
           id: Date.now() + 1,
           sender: 'bot',
-          text: replyText,
+          text: response,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           routeAction,
         },
       ]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          sender: 'bot',
+          text: 'I am right here! How can I help you with PCCOE campus, exams, or clubs today?',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 600);
+    }
   };
 
   return (

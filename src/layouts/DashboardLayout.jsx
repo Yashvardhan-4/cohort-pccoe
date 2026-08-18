@@ -56,16 +56,106 @@ export const DashboardLayout = () => {
   ];
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#FAFAFC] dark:bg-background text-foreground font-sans relative">
-      {/* Subtle Geometric Doodle Pattern Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#E2E8F0_1px,transparent_1px)] dark:bg-[radial-gradient(#27272A_1px,transparent_1px)] [background-size:32px_32px] opacity-60 pointer-events-none" />
+    <div className="flex h-screen w-screen overflow-hidden bg-[#F8F9FB] dark:bg-[#07080A] text-foreground font-sans relative">
+      {/* Subtle Geometric Doodle Pattern Background (Muted Ambient Backdrop) */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none select-none opacity-[0.09] dark:opacity-[0.05] text-zinc-800 dark:text-zinc-400"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <pattern
+            id="dashboard-geo-doodle"
+            width="160"
+            height="320"
+            patternUnits="userSpaceOnUse"
+          >
+            <g stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
+              {/* ROW 1 */}
+              <polygon points="24,6 34,24 14,24" />
+              <polygon points="56,6 68,15 56,24" />
+              <rect x="80" y="8" width="14" height="14" rx="1.5" />
+              <polygon points="108,6 118,24 98,24" />
+              <polygon points="140,6 152,15 140,24" />
+
+              {/* ROW 2 */}
+              <rect x="2" y="50" width="14" height="14" rx="1.5" />
+              <polygon points="20,50 36,50 28,66" />
+              <rect x="42" y="52" width="10" height="10" rx="1" />
+              <circle cx="64" cy="57" r="6" />
+              <rect x="82" y="50" width="14" height="14" rx="1.5" />
+              <polygon points="100,50 116,50 108,66" />
+              <rect x="122" y="52" width="10" height="10" rx="1" />
+              <circle cx="144" cy="57" r="6" />
+
+              {/* ROW 3 */}
+              <polygon points="0,88 6,98 0,98" />
+              <circle cx="20" cy="96" r="6" />
+              <rect x="36" y="91" width="10" height="10" rx="1" />
+              <rect x="58" y="91" width="10" height="10" rx="1" />
+              <polygon points="82,86 92,104 72,104" />
+              <circle cx="102" cy="96" r="6" />
+              <rect x="118" y="91" width="10" height="10" rx="1" />
+              <rect x="138" y="91" width="10" height="10" rx="1" />
+
+              {/* ROW 4 */}
+              <polygon points="24,126 34,144 14,144" />
+              <rect x="36" y="131" width="10" height="10" rx="1" />
+              <polygon points="56,126 68,135 56,144" />
+              <rect x="80" y="128" width="14" height="14" rx="1.5" />
+              <polygon points="108,126 118,144 98,144" />
+              <rect x="118" y="131" width="10" height="10" rx="1" />
+              <polygon points="140,126 152,135 140,144" />
+
+              {/* ROW 5 */}
+              <rect x="2" y="170" width="14" height="14" rx="1.5" />
+              <polygon points="20,170 36,170 28,186" />
+              <rect x="42" y="172" width="10" height="10" rx="1" />
+              <circle cx="64" cy="177" r="6" />
+              <rect x="82" y="170" width="14" height="14" rx="1.5" />
+              <polygon points="100,170 116,170 108,186" />
+              <rect x="122" y="172" width="10" height="10" rx="1" />
+              <circle cx="144" cy="177" r="6" />
+
+              {/* ROW 6 */}
+              <polygon points="0,208 6,218 0,218" />
+              <circle cx="20" cy="216" r="6" />
+              <rect x="36" y="211" width="10" height="10" rx="1" />
+              <rect x="58" y="211" width="10" height="10" rx="1" />
+              <polygon points="82,206 92,224 72,224" />
+              <circle cx="102" cy="216" r="6" />
+              <rect x="118" y="211" width="10" height="10" rx="1" />
+              <rect x="138" y="211" width="10" height="10" rx="1" />
+
+              {/* ROW 7 */}
+              <polygon points="24,246 34,264 14,264" />
+              <rect x="36" y="251" width="10" height="10" rx="1" />
+              <polygon points="56,246 68,255 56,264" />
+              <rect x="80" y="248" width="14" height="14" rx="1.5" />
+              <polygon points="108,246 118,264 98,264" />
+              <rect x="118" y="251" width="10" height="10" rx="1" />
+              <polygon points="140,246 152,255 140,264" />
+
+              {/* ROW 8 */}
+              <rect x="2" y="290" width="14" height="14" rx="1.5" />
+              <polygon points="20,290 36,290 28,306" />
+              <rect x="42" y="292" width="10" height="10" rx="1" />
+              <circle cx="64" cy="297" r="6" />
+              <rect x="82" y="290" width="14" height="14" rx="1.5" />
+              <polygon points="100,290 116,290 108,306" />
+              <rect x="122" y="292" width="10" height="10" rx="1" />
+              <circle cx="144" cy="297" r="6" />
+            </g>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dashboard-geo-doodle)" />
+      </svg>
 
       {/* ===================== HOVER-EXPANDABLE LEFT SIDEBAR ===================== */}
       <aside
         onMouseEnter={() => setIsSidebarHovered(true)}
         onMouseLeave={() => setIsSidebarHovered(false)}
-        className={`fixed left-0 top-0 bottom-0 z-50 flex flex-col justify-between border-r border-border/80 bg-card/95 backdrop-blur-2xl py-4 transition-all duration-300 ease-in-out shadow-2xl select-none ${
-          isSidebarHovered ? 'w-64 px-4' : 'w-16 px-2.5 items-center'
+        className={`fixed left-0 top-0 bottom-0 flex flex-col justify-between border-r border-border/80 bg-card/95 backdrop-blur-2xl py-4 transition-all duration-300 ease-in-out shadow-2xl select-none ${
+          isSidebarHovered ? 'w-64 px-4 z-[80] shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'w-16 px-2.5 items-center z-[70]'
         }`}
       >
         {/* Top Cohort Logo & Brand Name */}

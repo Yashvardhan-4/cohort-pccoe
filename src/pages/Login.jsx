@@ -94,24 +94,13 @@ export const Login = () => {
         transition={{ duration: 0.4 }}
         className="w-full max-w-4xl min-h-[480px] bg-[#181A1E] border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative z-10"
       >
-        {/* Left Column: Reflective Chrome Prismatic Artwork (Screenshot) */}
-        <div className="w-full md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-zinc-950 flex items-center justify-center">
-          {/* Diagonal Striped Prismatic Gradient Backdrop */}
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,#DC2626_0%,#F59E0B_25%,#10B981_50%,#06B6D4_75%,#8B5CF6_100%)] opacity-85" />
-          <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_20px,rgba(0,0,0,0.3)_20px,rgba(0,0,0,0.3)_40px)]" />
-
-          {/* Centered High-Fidelity 3D Chrome Figure Artwork */}
-          <div className="relative z-10 w-full h-full flex items-center justify-center p-6">
-            <img
-              src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80"
-              alt="Cohort Prism Sculpture"
-              className="w-full h-full object-cover rounded-2xl filter contrast-125 brightness-95 shadow-2xl mix-blend-luminosity"
-              onError={(e) => {
-                e.target.src = '/leftSideImage_eekf5p.png';
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-          </div>
+        {/* Left Column: Left Side Image (/leftSideImage_eekf5p.png) */}
+        <div className="w-full md:w-1/2 h-64 md:h-auto min-h-[320px] md:min-h-[480px] relative overflow-hidden bg-zinc-950 flex items-center justify-center">
+          <img
+            src="/leftSideImage_eekf5p.png"
+            alt="Cohort Login Artwork"
+            className="w-full h-full object-cover select-none"
+          />
         </div>
 
         {/* Right Column: Welcome to Cohort & Google Sign-In (Screenshot) */}

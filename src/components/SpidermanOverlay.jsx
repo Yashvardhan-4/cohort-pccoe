@@ -51,7 +51,7 @@ export const SpidermanOverlay = () => {
   }, [spidermanImages, location.pathname]);
 
   return (
-    <div className="spiderman-overlay-container pointer-events-none fixed inset-0 z-[99999] overflow-hidden select-none">
+    <div className="spiderman-overlay-container pointer-events-none fixed inset-0 z-[20] overflow-hidden select-none">
       {spideyItems.map((item) => (
         <div
           key={item.id}

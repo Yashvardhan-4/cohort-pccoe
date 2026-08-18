@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="320" viewBox="0 0 160 320" fill="none">
+  <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- ROW 1 (y: 0 - 40) -->
+    <polygon points="24,8 32,24 16,24" />
+    <polygon points="56,8 68,16 56,24" />
+    <rect x="82" y="10" width="12" height="12" rx="1" />
+    <polygon points="108,8 116,24 100,24" />
+    <polygon points="140,8 152,16 140,24" />
+
+    <!-- ROW 2 (y: 40 - 80) -->
+    <rect x="0" y="54" width="12" height="12" rx="1" />
+    <polygon points="20,54 36,54 28,70" />
+    <rect x="36" y="54" width="12" height="12" rx="1" />
+    <circle cx="62" cy="60" r="6" />
+    <rect x="80" y="54" width="12" height="12" rx="1" />
+    <polygon points="104,54 120,54 112,70" />
+    <rect x="120" y="54" width="12" height="12" rx="1" />
+    <circle cx="144" cy="60" r="6" />
+
+    <!-- ROW 3 (y: 80 - 120) -->
+    <polygon points="0,90 4,98 0,98" />
+    <circle cx="20" cy="98" r="6" />
+    <rect x="34" y="92" width="12" height="12" rx="1" />
+    <rect x="56" y="92" width="12" height="12" rx="1" />
+    <polygon points="82,90 90,106 74,106" />
+    <circle cx="102" cy="98" r="6" />
+    <rect x="116" y="92" width="12" height="12" rx="1" />
+    <rect x="138" y="92" width="12" height="12" rx="1" />
+
+    <!-- ROW 4 (y: 120 - 160) -->
+    <rect x="0" y="134" width="12" height="12" rx="1" />
+    <polygon points="24,132 32,148 16,148" />
+    <rect x="36" y="134" width="12" height="12" rx="1" />
+    <polygon points="56,132 68,140 56,148" />
+    <rect x="80" y="134" width="12" height="12" rx="1" />
+    <polygon points="108,132 116,148 100,148" />
+    <rect x="120" y="134" width="12" height="12" rx="1" />
+    <polygon points="140,132 152,140 140,148" />
+
+    <!-- ROW 5 (y: 160 - 200) -->
+    <rect x="0" y="174" width="12" height="12" rx="1" />
+    <polygon points="20,174 36,174 28,190" />
+    <rect x="36" y="174" width="12" height="12" rx="1" />
+    <circle cx="62" cy="180" r="6" />
+    <rect x="80" y="174" width="12" height="12" rx="1" />
+    <polygon points="104,174 120,174 112,190" />
+    <rect x="120" y="174" width="12" height="12" rx="1" />
+    <circle cx="144" cy="180" r="6" />
+
+    <!-- ROW 6 (y: 200 - 240) -->
+    <polygon points="0,210 4,218 0,218" />
+    <circle cx="20" cy="218" r="6" />
+    <rect x="34" y="212" width="12" height="12" rx="1" />
+    <rect x="56" y="212" width="12" height="12" rx="1" />
+    <polygon points="82,210 90,226 74,226" />
+    <circle cx="102" cy="218" r="6" />
+    <rect x="116" y="212" width="12" height="12" rx="1" />
+    <rect x="138" y="212" width="12" height="12" rx="1" />
+
+    <!-- ROW 7 (y: 240 - 280) -->
+    <rect x="0" y="254" width="12" height="12" rx="1" />
+    <polygon points="24,252 32,268 16,268" />
+    <rect x="36" y="254" width="12" height="12" rx="1" />
+    <polygon points="56,252 68,260 56,268" />
+    <rect x="80" y="254" width="12" height="12" rx="1" />
+    <polygon points="108,252 116,268 100,268" />
+    <rect x="120" y="254" width="12" height="12" rx="1" />
+    <polygon points="140,252 152,260 140,268" />
+
+    <!-- ROW 8 (y: 280 - 320) -->
+    <rect x="0" y="294" width="12" height="12" rx="1" />
+    <polygon points="20,294 36,294 28,310" />
+    <rect x="36" y="294" width="12" height="12" rx="1" />
+    <circle cx="62" cy="300" r="6" />
+    <rect x="80" y="294" width="12" height="12" rx="1" />
+    <polygon points="104,294 120,294 112,310" />
+    <rect x="120" y="294" width="12" height="12" rx="1" />
+    <circle cx="144" cy="300" r="6" />
+  </g>
+</svg>

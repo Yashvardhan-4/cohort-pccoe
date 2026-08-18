@@ -57,13 +57,6 @@ export const Preloader = ({ onLoadingComplete }) => {
             />
           </div>
 
-          {/* Minimal Skip Button in top right */}
-          <button
-            onClick={handleFinish}
-            className="absolute top-6 right-6 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-muted-foreground hover:text-foreground bg-card/60 backdrop-blur-md border border-border/50 transition-all cursor-pointer z-20"
-          >
-            Skip ➔
-          </button>
         </motion.div>
       )}
     </AnimatePresence>
