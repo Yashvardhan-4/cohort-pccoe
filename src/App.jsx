@@ -30,6 +30,10 @@ import { NotFound } from './pages/NotFound';
 
 const queryClient = new QueryClient();
 
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  '234786239650-vldp8ikbdq85srkbphojoc65ba49g430.apps.googleusercontent.com';
+
 // Protected route wrapper
 const ProtectedRoute = ({ children }) => {
   const { user, loading, hasAccess } = useAuth();
@@ -54,7 +58,7 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <GoogleOAuthProvider clientId="87428648402-t48b3kqeogkkdu7ihc9s0orrhhpvf1a8.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <AuthProvider>
