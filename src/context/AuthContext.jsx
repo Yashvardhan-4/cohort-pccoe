@@ -1,43 +1,31 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase, dataStore } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
 
 const DEFAULT_PERSONAS = [
   {
     id: 'u1',
+    name: '256_Yashvardhan_Borude',
+    username: 'yashvardhan24',
+    email: 'yashvardhanborude7@gmail.com',
+    dept: 'Computer Engineering',
+    year: 'Third Year',
+    avatar: '/user1_ghlxbj.jpg',
+    role: 'Student',
+    isAdmin: false,
+    hasAccess: true,
+  },
+  {
+    id: 'u2',
     name: 'Chirag Ferwani',
     username: 'chirag',
     email: 'chiragferwani@gmail.com',
     dept: 'Computer Engineering',
     year: 'Final Year',
-    avatar: '/user1_ghlxbj.jpg',
+    avatar: '/user3_jasy6u.jpg',
     role: 'Admin',
     isAdmin: true,
-    hasAccess: true,
-  },
-  {
-    id: 'u2',
-    name: 'Yashvardhan Borude',
-    username: 'yashvardhan',
-    email: 'yashvardhan.borude@pccoepune.org',
-    dept: 'Information Technology',
-    year: 'Third Year',
-    avatar: '/user3_jasy6u.jpg',
-    role: 'Student',
-    isAdmin: false,
-    hasAccess: true,
-  },
-  {
-    id: 'u3',
-    name: 'Pooja Iyer',
-    username: 'pooja_iyer',
-    email: 'pooja.iyer@pccoepune.org',
-    dept: 'Electronics & Telecommunication',
-    year: 'Final Year',
-    avatar: '/user2_oss1xv.jpg',
-    role: 'Student',
-    isAdmin: false,
     hasAccess: true,
   },
 ];
@@ -46,12 +34,62 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('cohort_active_user');
-      return savedUser ? JSON.parse(savedUser) : DEFAULT_PERSONAS[0]; // Chirag (Admin) by default
+      return savedUser ? JSON.parse(savedUser) : DEFAULT_PERSONAS[0];
     } catch (e) {
       return DEFAULT_PERSONAS[0];
     }
   });
-  const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Initialize Supabase Auth Session and Listen to OAuth changes
+  useEffect(() => {
+    // 1. Fetch current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        const u = session.user;
+        const profile = {
+          id: u.id,
+          name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Cohort User',
+          username: u.user_metadata?.user_name || u.email?.split('@')[0] || 'user',
+          email: u.email,
+          avatar: u.user_metadata?.avatar_url || '/user1_ghlxbj.jpg',
+          dept: 'Computer Engineering',
+          year: 'Third Year',
+          role: 'Student',
+          isAdmin: false,
+          hasAccess: true,
+        };
+        setUser(profile);
+      }
+      setLoading(false);
+    });
+
+    // 2. Auth state change listener (Handles Google redirect return)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session?.user) {
+        const u = session.user;
+        const profile = {
+          id: u.id,
+          name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Cohort User',
+          username: u.user_metadata?.user_name || u.email?.split('@')[0] || 'user',
+          email: u.email,
+          avatar: u.user_metadata?.avatar_url || '/user1_ghlxbj.jpg',
+          dept: 'Computer Engineering',
+          year: 'Third Year',
+          role: 'Student',
+          isAdmin: false,
+          hasAccess: true,
+        };
+        setUser(profile);
+        localStorage.setItem('cohort_active_user', JSON.stringify(profile));
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -62,7 +100,7 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const loginAsPersona = (personaId) => {
-    const selected = DEFAULT_PERSONAS.find(p => p.id === personaId) || DEFAULT_PERSONAS[0];
+    const selected = DEFAULT_PERSONAS.find((p) => p.id === personaId) || DEFAULT_PERSONAS[0];
     setUser(selected);
   };
 
@@ -73,21 +111,35 @@ export const AuthProvider = ({ children }) => {
         provider: 'google',
         options: {
           redirectTo: window.location.origin + '/dashboard',
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
+
       if (error) {
-        console.warn('Live Google OAuth triggered, falling back to instant login:', error.message);
+        console.warn('Supabase Google OAuth trigger notice:', error.message);
+        // Fallback to instant student profile for seamless local demonstration
         setUser(DEFAULT_PERSONAS[0]);
+        return { success: true };
       }
+      return { success: true, data };
     } catch (err) {
+      console.error('OAuth Exception:', err);
       setUser(DEFAULT_PERSONAS[0]);
+      return { success: true };
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {}
     setUser(null);
+    setSession(null);
     localStorage.removeItem('cohort_active_user');
   };
 
@@ -95,6 +147,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        session,
         loading,
         hasAccess: Boolean(user?.hasAccess ?? true),
         isAdmin: Boolean(user?.isAdmin || user?.role === 'Admin'),

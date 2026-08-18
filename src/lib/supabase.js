@@ -9,8 +9,11 @@ import {
   INITIAL_MESSAGES,
 } from './initialData';
 
-const supabaseUrl = 'https://guzgwtxnrnzzfmzjhzcp.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1emd3dHhucm56emZtempoemNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NDczNTIsImV4cCI6MjA4NjAyMzM1Mn0.3_QqyxEVTFPM1hAPU6ogGIjNWeAEZpmlEPNbao78SaU';
+const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL || 'https://cxbqgfzgcyltpkjboyrf.supabase.co';
+const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  'sb_publishable_zX2A-np88xLNcLAMQXuyMg_BQXdJhz_';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
