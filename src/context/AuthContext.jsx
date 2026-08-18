@@ -3,40 +3,13 @@ import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
 
-const DEFAULT_PERSONAS = [
-  {
-    id: 'u1',
-    name: '256_Yashvardhan_Borude',
-    username: 'yashvardhan24',
-    email: 'yashvardhanborude7@gmail.com',
-    dept: 'Computer Engineering',
-    year: 'Third Year',
-    avatar: '/user1_ghlxbj.jpg',
-    role: 'Student',
-    isAdmin: false,
-    hasAccess: true,
-  },
-  {
-    id: 'u2',
-    name: 'Chirag Ferwani',
-    username: 'chirag',
-    email: 'chiragferwani@gmail.com',
-    dept: 'Computer Engineering',
-    year: 'Final Year',
-    avatar: '/user3_jasy6u.jpg',
-    role: 'Admin',
-    isAdmin: true,
-    hasAccess: true,
-  },
-];
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('cohort_active_user');
-      return savedUser ? JSON.parse(savedUser) : DEFAULT_PERSONAS[0];
+      return savedUser ? JSON.parse(savedUser) : null;
     } catch (e) {
-      return DEFAULT_PERSONAS[0];
+      return null;
     }
   });
   const [session, setSession] = useState(null);
@@ -44,7 +17,7 @@ export const AuthProvider = ({ children }) => {
 
   // Initialize Supabase Auth Session and Listen to OAuth changes
   useEffect(() => {
-    // 1. Fetch current session
+    // 1. Fetch current live session from Supabase
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
@@ -62,11 +35,12 @@ export const AuthProvider = ({ children }) => {
           hasAccess: true,
         };
         setUser(profile);
+        localStorage.setItem('cohort_active_user', JSON.stringify(profile));
       }
       setLoading(false);
     });
 
-    // 2. Auth state change listener (Handles Google redirect return)
+    // 2. Auth state change listener (Triggered when returning from Google redirect)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session?.user) {
@@ -91,19 +65,6 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('cohort_active_user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('cohort_active_user');
-    }
-  }, [user]);
-
-  const loginAsPersona = (personaId) => {
-    const selected = DEFAULT_PERSONAS.find((p) => p.id === personaId) || DEFAULT_PERSONAS[0];
-    setUser(selected);
-  };
-
   const loginWithGoogle = async () => {
     try {
       setLoading(true);
@@ -119,16 +80,13 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (error) {
-        console.warn('Supabase Google OAuth trigger notice:', error.message);
-        // Fallback to instant student profile for seamless local demonstration
-        setUser(DEFAULT_PERSONAS[0]);
-        return { success: true };
+        console.warn('Supabase Google OAuth trigger:', error.message);
+        throw error;
       }
       return { success: true, data };
     } catch (err) {
-      console.error('OAuth Exception:', err);
-      setUser(DEFAULT_PERSONAS[0]);
-      return { success: true };
+      console.error('Google OAuth Exception:', err);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -151,10 +109,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         hasAccess: Boolean(user?.hasAccess ?? true),
         isAdmin: Boolean(user?.isAdmin || user?.role === 'Admin'),
-        loginAsPersona,
         loginWithGoogle,
         logout,
-        personas: DEFAULT_PERSONAS,
       }}
     >
       {children}

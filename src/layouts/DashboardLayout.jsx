@@ -35,6 +35,11 @@ export const DashboardLayout = () => {
   const [isSidebarHovered, setIsSidebarHovered] = useState(false);
   const [isBuddyModalOpen, setIsBuddyModalOpen] = useState(false);
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
   const navItems = [
     { to: '/dashboard', label: 'Home', icon: Home, exact: true },
     { to: '/dashboard/communities', label: 'Communities', icon: Users, badge: 2 },
@@ -129,8 +134,8 @@ export const DashboardLayout = () => {
           })}
         </nav>
 
-        {/* Bottom User Capsule & Theme Switcher */}
-        <div className="w-full flex flex-col gap-2 pt-3 border-t border-border/50">
+        {/* Bottom Actions: Theme Switcher & Logout */}
+        <div className="w-full flex flex-col gap-1.5 pt-3 border-t border-border/50">
           <button
             onClick={toggleTheme}
             className={`flex items-center gap-3 w-full p-2.5 rounded-2xl text-zinc-500 hover:text-foreground hover:bg-muted/70 transition-colors cursor-pointer ${
@@ -145,6 +150,21 @@ export const DashboardLayout = () => {
             {isSidebarHovered && (
               <span className="text-xs font-semibold whitespace-nowrap truncate">
                 {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={handleLogout}
+            title="Log Out"
+            className={`flex items-center gap-3 w-full p-2.5 rounded-2xl text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer ${
+              !isSidebarHovered ? 'justify-center' : ''
+            }`}
+          >
+            <LogOut className="w-5 h-5 shrink-0" />
+            {isSidebarHovered && (
+              <span className="text-xs font-semibold whitespace-nowrap truncate">
+                Log Out
               </span>
             )}
           </button>
